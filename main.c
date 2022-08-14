@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <limits.h>
 #include<sys/utsname.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <string.h>
 
 /*
@@ -20,7 +22,7 @@ The following 7 commands are to be supported by your shell program.
 int get_file(char* file)
 {
     FILE *fptr;
-
+    int max = 40;
     char filename[500],c;
     char* current_file = file;
     fptr = fopen(current_file, "r");
@@ -29,9 +31,9 @@ int get_file(char* file)
 
         return 0;
     }
-
+    
     c = fgetc(fptr);
-    while( c != EOF)
+    while( c != EOF )
     {
         printf("%c",c);
         c = fgetc(fptr);
