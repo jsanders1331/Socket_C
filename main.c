@@ -28,7 +28,7 @@ The following 7 commands are to be supported by your shell program.
 int my_gets(char *file)
 {
     
-    char source[40];
+    char source[41];
     FILE *fptr = fopen(file, "r");
     char filename[1024], c;
     if (fptr == NULL)
@@ -36,10 +36,25 @@ int my_gets(char *file)
         printf("Error opening file\n");
         return 1;
     }
-    size_t chars_read = fread(source, sizeof(char), 40, fptr); // Read each 
-    // if less than 40, reached end of file
+    while(true){
 
-    printf("%s",source);
+        size_t chars_read = fread(source, sizeof(char), 40, fptr); // Read each 
+        // if less than 40, reached end of file
+        source[41] = '\0';
+        printf("%s",source);
+        if(chars_read != 40){
+            printf("%s", "\n");
+            break;
+        }
+        // for(int i = 0; i <40; i++){
+        //     source[i]
+        // }
+        bzero(source,41);
+        char c;
+        scanf("%c",&c);
+    }
+    
+    
     fclose(fptr);
     return 0;
 }
