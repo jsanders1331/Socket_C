@@ -25,26 +25,21 @@ The following 7 commands are to be supported by your shell program.
 • get filename - prints the content of the file filename to the screen
 • quit - ends the program
 */
-int get_file(char *file)
+int my_gets(char *file)
 {
-    FILE *fptr;
-    int max = 40;
-    char filename[500], c;
-    char *current_file = file;
-    fptr = fopen(current_file, "r");
+    
+    char source[40];
+    FILE *fptr = fopen(file, "r");
+    char filename[1024], c;
     if (fptr == NULL)
     {
         printf("Error opening file\n");
-
-        return 0;
+        return 1;
     }
+    size_t chars_read = fread(source, sizeof(char), 40, fptr); // Read each 
+    // if less than 40, reached end of file
 
-    c = fgetc(fptr);
-    while (c != EOF)
-    {
-        printf("%c", c);
-        c = fgetc(fptr);
-    }
+    printf("%s",source);
     fclose(fptr);
     return 0;
 }
@@ -145,6 +140,22 @@ int copyfile1(char *infilename, char *outfileDir)
     outfile = fopen(outfilename, "w");
 }
 
+int shell() // Take inputs and run commands, return output
+{
+    
+    while(true){
+        size_t n = 262144; // getconf ARG_MAX -> maximum argument size
+        char* buffer = malloc(n);
+        getline(&buffer, &n, stdin);
+        if (strcmp(buffer, "quit\n") == 0)  // Make sure to /n
+        {
+            return 0;
+        } 
+        printf("%s", buffer);
+        free(buffer);
+    }
+}
+
 int main(int argc, char const *argv[])
 {
 
@@ -162,24 +173,6 @@ int main(int argc, char const *argv[])
     // put("sup", s);
 
     // copyfile1("test.txt","./sup");
-
-    char *buffer;
-
-    while (true)
-    {
-        size_t n = 1024;
-        buffer = malloc(n);
-        getline(&buffer, &n, stdin);
-        int y = strcmp("quit\n","quit");
-        printf("%i\n",y);
-        
-        if (strcmp(buffer, "quit\n") == 0) 
-        {
-            return 0;
-        } 
-        printf("%s", buffer);
-        free(buffer);
-    };
-
+    my_gets("test.txt");
     return 0;
 }
