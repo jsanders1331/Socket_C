@@ -17,24 +17,24 @@ extern int errno;
 /*
 The following 7 commands are to be supported by your shell program.
 • calc expr. - prints out the result of the mathematical prefix expression that
- comes after the command.
-• time - prints out the current local time and date
-• path - prints out the current working directory
-• sys - prints the name and version of the OS and CPU type
-• put dirname filename(s) [-f] – put files filenames in the directory dirname
-• get filename - prints the content of the file filename to the screen
-• quit - ends the program
+ comes after the command. -- NOPE
+• time - prints out the current local time and date -- DONE
+• path - prints out the current working directory -- DONE
+• sys - prints the name and version of the OS and CPU type -- DONE ?
+• put dirname filename(s) [-f] – put files filenames in the directory dirname 
+• get filename - prints the content of the file filename to the screen -- DONE
+• quit - ends the program -- DONE
 */
 int my_gets(char *file)
 {
     
-    char source[41];
+    char source[41]; // buffer 
     FILE *fptr = fopen(file, "r");
-    char filename[1024], c;
+    char filename[1024], c; 
     if (fptr == NULL)
     {
         printf("Error opening file\n");
-        return 1;
+        return -1; //false
     }
     while(true){
 
@@ -130,43 +130,77 @@ void put(char dirname[], char *files[])
     if (mkdir(dirname, 0777) == -1)
     {
         perror("");
-        if (errno == EEXIST)
-        {
-            printf("Do something");
-        }
+        return;
     }
+
     printf("%s\n", current);
 }
 
-int copyfile1(char *infilename, char *outfileDir)
+int copy_file(char *infilename, char *outfileDir) // part of the puts ()
 {
-    FILE *infile; // File handles for source and destination.
-    FILE *outfile;
+    FILE *infile; // File handles for source
+    FILE *outfile; // Dest
     char outfilename[PATH_MAX];
+    char c;
 
-    infile = fopen(infilename, "r"); // Open the input and output files.
-    if (infile == NULL)
+    infile = fopen(infilename, "r"); // Open the input file
+    if (infile == NULL) // check for error
     {
 
         return 1;
     }
-    sprintf(outfilename, "%s/%s", outfileDir, basename(infilename));
+    sprintf(outfilename, "%s/%s", outfileDir, basename(infilename)); // 
 
-    outfile = fopen(outfilename, "w");
+    outfile = fopen(outfilename, "w"); //open file for writing
+    if(outfile == NULL)
+    {
+        printf("Cannot open file\n");
+        return -1;
+    }
+    c = fgetc(infile);
+    while (c != EOF)
+        {
+            fputc(c, outfile);
+            c = fgetc(infile);
+        }
+    fclose(outfile);
+    fclose(infile);
 }
+
 
 int shell() // Take inputs and run commands, return output
 {
     
     while(true){
         size_t n = 262144; // getconf ARG_MAX -> maximum argument size
-        char* buffer = malloc(n);
-        getline(&buffer, &n, stdin);
+        char* buffer = malloc(n); 
+        printf("%s", buffer);
+        char *token; // for buffer strings
+        char s = ' '; // delimiter
+
+
+        getline(&buffer, &n, stdin); 
+        char my_string[PATH_MAX]; 
+        strcpy(my_string, buffer);
+        char* my_string_ptr = my_string;
+        token = strtok(my_string, " ");
+        printf("%s", token);
+        while (token != NULL)
+            {
+                printf("%s\n", token);
+                printf("token works\n");
+                token = strtok(NULL," ");
+            }
+        
         if (strcmp(buffer, "quit\n") == 0)  // Make sure to /n
         {
             return 0;
-        } 
-        printf("%s", buffer);
+        }
+        else if((strcmp(buffer, "gets\n") == 0))
+        {
+            printf("Gets command");
+        }
+        
         free(buffer);
     }
 }
@@ -174,20 +208,22 @@ int shell() // Take inputs and run commands, return output
 int main(int argc, char const *argv[])
 {
 
-    // //print_sys();
-    // //get_file("test.txt");
-    // //path();
-    // //print_time();
-    // int j = 0;
-    // printf("%i",argc);
-    // for(int i=0;i<argc;i++)
-    // {
-    //     printf("%s\n",argv[i]);
-    // }
+    // // //print_sys();
+    // // //get_file("test.txt");
+    // // //path();
+    // // //print_time();
+    // // int j = 0;
+    // // printf("%i",argc);
+    // // for(int i=0;i<argc;i++)
+    // // {
+    // //     printf("%s\n",argv[i]);
+    // // }
     // char* s[10];
     // put("sup", s);
 
-    // copyfile1("test.txt","./sup");
-    my_gets("test.txt");
+    // copy_file("test.txt","./sup");
+    // //my_gets("test.txt");
+
+    shell();
     return 0;
 }
