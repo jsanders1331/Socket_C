@@ -160,47 +160,64 @@ int copy_file(char *infilename, char *outfileDir) // part of the puts ()
     c = fgetc(infile);
     while (c != EOF)
         {
+            
             fputc(c, outfile);
             c = fgetc(infile);
         }
+
+    
     fclose(outfile);
     fclose(infile);
+    return 0;
+
 }
 
 
 int shell() // Take inputs and run commands, return output
 {
-    
-    while(true){
+    while(true) {
         size_t n = 262144; // getconf ARG_MAX -> maximum argument size
         char* buffer = malloc(n); 
         printf("%s", buffer);
         char *token; // for buffer strings
-        char s = ' '; // delimiter
+        //char s = ' '; // delimiter
 
 
         getline(&buffer, &n, stdin); 
-        char my_string[PATH_MAX]; 
-        strcpy(my_string, buffer);
-        char* my_string_ptr = my_string;
-        token = strtok(my_string, " ");
-        printf("%s", token);
-        while (token != NULL)
-            {
-                printf("%s\n", token);
-                printf("token works\n");
-                token = strtok(NULL," ");
-            }
+        char *pos;
+        if ((pos = strchr(buffer, '\n')) != NULL){
+            *pos = '\0';
+        }
+        // char my_string[PATH_MAX]; 
+        // strcpy(my_string, buffer);
+        // char* my_string_ptr = my_string;
+        if (strcmp(buffer, "") == 0) {
+            goto cleanup;
+        }
+
+        token = strtok(buffer, " ");
+        //printf("%s", token);
+        // while (token != NULL)
+        //     {
+        //         printf("%s\n", token);
+        //         printf("token works\n");
+        //         token = strtok(NULL," ");
+        //     }
         
-        if (strcmp(buffer, "quit\n") == 0)  // Make sure to /n
+        if (strcmp(token, "quit") == 0)  // Make sure to /n
         {
             return 0;
         }
-        else if((strcmp(buffer, "gets\n") == 0))
+        else if((strcmp(token, "get") == 0))
         {
-            printf("Gets command");
+            printf("In the get command");
+            char* s = strtok(NULL," ");
+            my_gets(s);
+
+            
         }
         
+        cleanup:
         free(buffer);
     }
 }
@@ -223,6 +240,7 @@ int main(int argc, char const *argv[])
 
     // copy_file("test.txt","./sup");
     // //my_gets("test.txt");
+    printf("started");
 
     shell();
     return 0;
