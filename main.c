@@ -191,7 +191,7 @@ int shell() // Take inputs and run commands, return output
         // char my_string[PATH_MAX]; 
         // strcpy(my_string, buffer);
         // char* my_string_ptr = my_string;
-        if (strcmp(buffer, "") == 0) {
+        if (*buffer == '\0') { // /0/0
             goto cleanup;
         }
 
@@ -213,9 +213,8 @@ int shell() // Take inputs and run commands, return output
             printf("In the get command");
             char* s = strtok(NULL," ");
             my_gets(s);
-
-            
         }
+        else if((strcmp(token, "put") == 0)){}
         
         cleanup:
         free(buffer);
