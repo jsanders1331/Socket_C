@@ -189,7 +189,8 @@ int shell() // Take inputs and run commands, return output
         getline(&buffer, &n, stdin); 
         char *pos;
         if ((pos = strchr(buffer, '\n')) != NULL){ // code if enter is pressed
-            *pos = '\0';
+            *pos = '\0'; // find first occurence of \n in buffer and set it's value to the terminator
+            //printf("changing pointer..");
         }
         // char my_string[PATH_MAX]; 
         // strcpy(my_string, buffer);
@@ -211,6 +212,18 @@ int shell() // Take inputs and run commands, return output
         if (strcmp(token, "quit") == 0)  // Make sure to /n
         {
             return 0;
+        }
+        else if((strcmp(token, "time") == 0))
+        {
+            print_time();
+        }
+        else if((strcmp(token, "path") == 0))
+        {
+            path();
+        }
+        else if((strcmp(token, "sys") == 0))
+        {
+            get_cpu();
         }
         else if((strcmp(token, "get") == 0))
         {
