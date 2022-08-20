@@ -255,31 +255,34 @@ int shell() // Take inputs and run commands, return output
             }
 
 
+            
             if(s == NULL) // if token is null ptr
             {
              for(int i=0;i<n_filenames;i++)
              {
-                char str1[PATH_MAX] = "./";
-                put(my_dir);
-                strcat(str1, my_dir);
-                printf("vala of str1 is: %s", str1);
-                copy_file(filenames[i],my_dir);
+                //char str1[PATH_MAX] = "./";
+                //strcat(str1, my_dir);
+                //printf("value of str1 is: %s", str1);
+                if(put(my_dir) == true){
+                    copy_file(filenames[i],my_dir);
+                }
+                else{
+                    printf("Could not create file. \n");
+                    break;
+                }
              }
              
             }
             else if(strcmp(s,"-f") == 0)
             {
-
-            }
-
-            else
-            {
-                for(int i=0;i<n_filenames;i++)
+                for(int i = 0;i<n_filenames;i++)
                 {
-                    //copy_file(filenames[i],my_dir);
+                    put(my_dir);
+                    copy_file(filenames[i],my_dir);
                 }
             }
 
+            
             // for(int i=0;i<n_filenames;i++)
             // {
             //     printf("n of filename: %i / value: %s\n",i, filenames[i]);
@@ -306,14 +309,6 @@ int shell() // Take inputs and run commands, return output
 int main(int argc, char const *argv[])
 {
 
-    // // //print_sys();
-    // // //get_file("test.txt");
-    // // //path();
-    // // //print_time();
-    // // int j = 0;
-    // // printf("%i",argc);
-    // // for(int i=0;i<argc;i++)
-    // // {
     
     printf("Shell started\n");
     
