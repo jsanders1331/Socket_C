@@ -116,7 +116,7 @@ completely overwritten (old content is deleted). If a file(s) doesn’t exist, y
 print a ‘file not found’ message for that file.
 */
 
-void put(char dirname[])
+int put(char dirname[])
 {
 
     char cwd[PATH_MAX];
@@ -126,14 +126,15 @@ void put(char dirname[])
         // printf("%s\n",cwd);
         strcpy(current, cwd);
     }
-    mkdir(dirname, 0777);
-    if (mkdir(dirname, 0777) == -1)
+    
+    if (mkdir(dirname, 0777) == -1) // check if file exists
     {
         perror("");
-        return;
+        return false;
     }
+    mkdir(dirname, 0777);
     
-
+    return true;
     //printf("%s\n", current);
 }
 
@@ -169,6 +170,7 @@ int copy_file(char *infilename, char *outfileDir) // part of the puts ()
     
     fclose(outfile);
     fclose(infile);
+    printf("Copy file success! \n");
     return 0;
 
 }
@@ -221,7 +223,6 @@ int shell() // Take inputs and run commands, return output
             
             char my_dir[strlen(s)+1]; // dirname input
             strcpy(my_dir,s);
-            put(my_dir);
             int n_filenames = 0;
             printf("This is my_dir: %s\n",my_dir);
             //char** c1 = (char *[]){"Hey","Hello"};
@@ -240,16 +241,29 @@ int shell() // Take inputs and run commands, return output
                 // printf("%s",filenames[n_filenames]);
             }
 
-            if(strcmp(s,"-f") == 0)
+
+            if(s == NULL) // if token is null ptr
             {
-                
+             for(int i=0;i<n_filenames;i++)
+             {
+                char str1[PATH_MAX] = "./";
+                put(my_dir);
+                strcat(str1, my_dir);
+                printf("vala of str1 is: %s", str1);
+                copy_file(filenames[i],my_dir);
+             }
+             
+            }
+            else if(strcmp(s,"-f") == 0)
+            {
+
             }
 
             else
             {
                 for(int i=0;i<n_filenames;i++)
                 {
-                    copy_file(filenames[i],my_dir);
+                    //copy_file(filenames[i],my_dir);
                 }
             }
 
