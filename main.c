@@ -116,7 +116,7 @@ completely overwritten (old content is deleted). If a file(s) doesn’t exist, y
 print a ‘file not found’ message for that file.
 */
 
-void put(char dirname[], char *files[])
+void put(char dirname[])
 {
 
     char cwd[PATH_MAX];
@@ -132,8 +132,9 @@ void put(char dirname[], char *files[])
         perror("");
         return;
     }
+    
 
-    printf("%s\n", current);
+    //printf("%s\n", current);
 }
 
 int copy_file(char *infilename, char *outfileDir) // part of the puts ()
@@ -178,14 +179,14 @@ int shell() // Take inputs and run commands, return output
     while(true) {
         size_t n = 262144; // getconf ARG_MAX -> maximum argument size
         char* buffer = malloc(n); 
-        printf("%s", buffer);
+        //printf("%s", buffer);
         char *token; // for buffer strings
         //char s = ' '; // delimiter
 
 
         getline(&buffer, &n, stdin); 
         char *pos;
-        if ((pos = strchr(buffer, '\n')) != NULL){
+        if ((pos = strchr(buffer, '\n')) != NULL){ // code if enter is pressed
             *pos = '\0';
         }
         // char my_string[PATH_MAX]; 
@@ -196,6 +197,7 @@ int shell() // Take inputs and run commands, return output
         }
 
         token = strtok(buffer, " ");
+    
         //printf("%s", token);
         // while (token != NULL)
         //     {
@@ -214,7 +216,60 @@ int shell() // Take inputs and run commands, return output
             char* s = strtok(NULL," ");
             my_gets(s);
         }
-        else if((strcmp(token, "put") == 0)){}
+        else if((strcmp(token, "put") == 0)){
+            char* s = strtok(NULL," "); // token
+            
+            char my_dir[strlen(s)+1]; // dirname input
+            strcpy(my_dir,s);
+            put(my_dir);
+            int n_filenames = 0;
+            printf("This is my_dir: %s\n",my_dir);
+            //char** c1 = (char *[]){"Hey","Hello"};
+            char** filenames = calloc(1,1024);
+            
+            while ((s = strtok(NULL," ")) != NULL) 
+            {
+                if(strcmp(s,"-f") == 0)
+                {
+                    break;
+                }
+                filenames[n_filenames] = s; 
+                n_filenames++;
+                filenames = realloc(filenames, 1024*(n_filenames+1)); // debugger broken, only shows first element in pointer array
+                // printf("%s\n",s);
+                // printf("%s",filenames[n_filenames]);
+            }
+
+            if(strcmp(s,"-f") == 0)
+            {
+                
+            }
+
+            else
+            {
+                for(int i=0;i<n_filenames;i++)
+                {
+                    copy_file(filenames[i],my_dir);
+                }
+            }
+
+            // for(int i=0;i<n_filenames;i++)
+            // {
+            //     printf("n of filename: %i / value: %s\n",i, filenames[i]);
+            // }
+
+            // //     printf("%s\n",argv[i]);
+            // // }
+            // char* s[10];
+            // put("sup", s);
+
+            // copy_file("test.txt","./sup");
+            // //my_gets("test.txt");
+                    
+            
+            
+        }
+        
         
         cleanup:
         free(buffer);
@@ -232,14 +287,9 @@ int main(int argc, char const *argv[])
     // // printf("%i",argc);
     // // for(int i=0;i<argc;i++)
     // // {
-    // //     printf("%s\n",argv[i]);
-    // // }
-    // char* s[10];
-    // put("sup", s);
-
-    // copy_file("test.txt","./sup");
-    // //my_gets("test.txt");
-    printf("started");
+    
+    printf("Shell started\n");
+    
 
     shell();
     return 0;
