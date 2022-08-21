@@ -29,6 +29,7 @@ void get_cpu() // Uses uts api to get CPU
 
 void print_sys() // prints version of OS and CPU type
 {
+    get_cpu();
 #if __APPLE__
     system("sysctl -a | grep machdep.cpu | grep machdep.cpu.brand_string"); // CPU INFO FOR MAC
     printf("This is a MAC_OS operating system\n");
@@ -45,7 +46,5 @@ void print_sys() // prints version of OS and CPU type
 #else
     printf("Operating system not detected.\n");
 #endif
-
-    get_cpu();
 }
 
