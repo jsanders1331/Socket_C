@@ -1,14 +1,16 @@
+output: main.o commands
+	gcc $(shell find . -type f -name "*.o" -print0 | xargs -0) -o shell
 
-output: main.o system/system.o
-	gcc main.o system.o -o shell
+commands: commands/*.c
+	gcc -c $(shell find . -type f -name "*.c" -print0 | xargs -0)
+# system.o: system/system.c system/system.h
+# 	gcc -c system.c
+# path.o: commands/path.c commands/path.h
+# 	gcc -c path.c
 
-main.o: main.c
-	gcc -c main.c
-system.o: system/system.c system/system.h
-	gcc -c system.c
 
 clean:
-	rm *.o system/*.o shell
+	rm *.o shell
 
 
 target: dependencies

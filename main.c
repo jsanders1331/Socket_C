@@ -13,7 +13,11 @@
 #include <libgen.h>
 
 // my files
-#include "./system/system.h"
+#include "commands/gets.h"
+#include "commands/path.h"
+#include "commands/puts.h"
+#include "commands/system.h"
+#include "commands/time.h"
 
 extern int errno;
 
@@ -28,148 +32,6 @@ The following 7 commands are to be supported by your shell program.
 • get filename - prints the content of the file filename to the screen -- DONE
 • quit - ends the program -- DONE
 */
-int my_gets(char *file)
-{
-    
-    char source[41]; // buffer 
-    FILE *fptr = fopen(file, "r");
-    char filename[1024], c; 
-    if (fptr == NULL)
-    {
-        printf("Error opening file\n");
-        return -1; //false
-    }
-    while(true){
-
-        size_t chars_read = fread(source, sizeof(char), 40, fptr); // Read each 
-        // if less than 40, reached end of file
-        source[41] = '\0';
-        printf("%s",source);
-        if(chars_read != 40){
-            printf("%s", "\n");
-            break;
-        }
-        // for(int i = 0; i <40; i++){
-        //     source[i]
-        // }
-        bzero(source,41);
-        char c;
-        scanf("%c",&c);
-    }
-    
-    
-    fclose(fptr);
-    return 0;
-}
-
-
-void print_sys() // prints version of OS and CPU type
-{
-#if __APPLE__
-    printf("This is a MAC_OS operating system\n");
-#elif _WIN32
-    printf("This is a Windows operating system\n");
-#elif _WIN64
-    printf("This is a Windows 64bit operating system");
-#elif __LINUX__
-    printf("This is a Linux operating system\n");
-#elif _POSIX_VERSION
-    printf("This is a POSIX based operating system (Windows with cygwin)\n");
-#else
-    printf("Operating system not detected.\n");
-#endif
-
-    get_cpu();
-}
-void path() // prints current path of working directory
-{
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        printf("Dir: %s\n", cwd);
-    }
-    else
-    {
-        printf("Error retrieving directory");
-    }
-}
-
-void print_time()
-{
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    printf("Date is: %d/%d/%d, Time is: %d:%d:%d \n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-}
-void calc_expr()
-{
-}
-
-/*
-The put command will create a new directory called dirname and copy the file (or
-files) listed in the command, in this directory. If the directory exists you should only print
-an error message, unless -f has been specified, in which case the directory will be
-completely overwritten (old content is deleted). If a file(s) doesn’t exist, you will need to
-print a ‘file not found’ message for that file.
-*/
-
-int put(char dirname[])
-{
-
-    char cwd[PATH_MAX];
-    char current[1024];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        // printf("%s\n",cwd);
-        strcpy(current, cwd);
-    }
-    
-    if (mkdir(dirname, 0777) == -1) // check if file exists
-    {
-        perror("");
-        return false;
-    }
-    mkdir(dirname, 0777);
-    
-    return true;
-    //printf("%s\n", current);
-}
-
-int copy_file(char *infilename, char *outfileDir) // part of the puts ()
-{
-    FILE *infile; // File handles for source
-    FILE *outfile; // Dest
-    char outfilename[PATH_MAX];
-    char c;
-
-    infile = fopen(infilename, "r"); // Open the input file
-    if (infile == NULL) // check for error
-    {
-
-        return 1;
-    }
-    sprintf(outfilename, "%s/%s", outfileDir, basename(infilename)); // 
-
-    outfile = fopen(outfilename, "w"); //open file for writing
-    if(outfile == NULL)
-    {
-        printf("Cannot open file\n");
-        return -1;
-    }
-    c = fgetc(infile);
-    while (c != EOF)
-        {
-            
-            fputc(c, outfile);
-            c = fgetc(infile);
-        }
-
-    
-    fclose(outfile);
-    fclose(infile);
-    printf("Copy file success! \n");
-    return 0;
-
-}
 
 
 int shell() // Take inputs and run commands, return output
@@ -301,6 +163,7 @@ int shell() // Take inputs and run commands, return output
         free(buffer);
     }
 }
+
 
 int main(int argc, char const *argv[])
 {
