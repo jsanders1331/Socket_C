@@ -12,6 +12,9 @@
 #include <errno.h>
 #include <libgen.h>
 
+// my files
+#include "./system/system.h"
+
 extern int errno;
 
 /*
@@ -58,14 +61,7 @@ int my_gets(char *file)
     fclose(fptr);
     return 0;
 }
-void get_cpu()
-{
-    struct utsname uts;
-    uname(&uts);
-    printf("System is %s on %s hardware\n", uts.sysname, uts.machine);
-    printf("OS Release is %s\n", uts.release);
-    printf("OS Version is\n", uts.version);
-}
+
 
 void print_sys() // prints version of OS and CPU type
 {
@@ -90,7 +86,7 @@ void path() // prints current path of working directory
     char cwd[PATH_MAX];
     if (getcwd(cwd, sizeof(cwd)) != NULL)
     {
-        printf("Dir: %s", cwd);
+        printf("Dir: %s\n", cwd);
     }
     else
     {
