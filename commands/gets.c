@@ -14,7 +14,6 @@
 
 #include "gets.h"
 
-
 int my_gets(char *file) // reads in a file with a buffer
 {
     
