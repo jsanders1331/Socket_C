@@ -12,7 +12,7 @@
 #include <libgen.h>
 
 #include "system.h"
-void get_cpu()
+void get_cpu() // Uses uts api to get CPU
 {
     struct utsname uts;
     uname(&uts);

@@ -57,7 +57,7 @@ int copy_file(char *infilename, char *outfileDir) // part of the puts ()
         printf("Cannot open file\n");
         return -1;
     }
-    c = fgetc(infile);
+    c = fgetc(infile); // copy contents of file
     while (c != EOF)
         {
             

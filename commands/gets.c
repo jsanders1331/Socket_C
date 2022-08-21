@@ -15,7 +15,7 @@
 #include "gets.h"
 
 
-int my_gets(char *file)
+int my_gets(char *file) // reads in a file with a buffer
 {
     
     char source[41]; // buffer 
@@ -32,16 +32,13 @@ int my_gets(char *file)
         // if less than 40, reached end of file
         source[41] = '\0';
         printf("%s",source);
-        if(chars_read != 40){
+        if(chars_read != 40){ // if we have gone over buffer size
             printf("%s", "\n");
             break;
         }
-        // for(int i = 0; i <40; i++){
-        //     source[i]
-        // }
         bzero(source,41);
         char c;
-        scanf("%c",&c);
+        scanf("%c",&c); // simulate if any key is pressed
     }
     
     

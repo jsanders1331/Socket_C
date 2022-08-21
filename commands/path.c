@@ -17,7 +17,7 @@
 void path() // prints current path of working directory
 {
     char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    if (getcwd(cwd, sizeof(cwd)) != NULL) // get cwd command does this
     {
         printf("Dir: %s\n", cwd);
     }

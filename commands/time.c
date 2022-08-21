@@ -13,7 +13,7 @@
 
 
 #include "time.h"
-void print_time()
+void print_time() // uses time.h functions
 {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);

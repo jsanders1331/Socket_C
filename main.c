@@ -50,10 +50,8 @@ int shell() // Take inputs and run commands, return output
             *pos = '\0'; // find first occurence of \n in buffer and set it's value to the terminator
             //printf("changing pointer..");
         }
-        // char my_string[PATH_MAX]; 
-        // strcpy(my_string, buffer);
-        // char* my_string_ptr = my_string;
-        if (*buffer == '\0') { // /0/0
+        
+        if (*buffer == '\0') { // /0/0 if enter pressed we can skip code and stay in shell loop
             goto cleanup;
         }
 
@@ -67,7 +65,7 @@ int shell() // Take inputs and run commands, return output
         //         token = strtok(NULL," ");
         //     }
         
-        if (strcmp(token, "quit") == 0)  // Make sure to /n
+        if (strcmp(token, "quit") == 0)  // Compare all the commands to input
         {
             return 0;
         }
@@ -81,7 +79,7 @@ int shell() // Take inputs and run commands, return output
         }
         else if((strcmp(token, "sys") == 0))
         {
-            get_cpu();
+            print_sys();
         }
         else if((strcmp(token, "get") == 0))
         {
@@ -99,7 +97,7 @@ int shell() // Take inputs and run commands, return output
             //char** c1 = (char *[]){"Hey","Hello"};
             char** filenames = calloc(1,1024);
             
-            while ((s = strtok(NULL," ")) != NULL) 
+            while ((s = strtok(NULL," ")) != NULL) // go through each token
             {
                 if(strcmp(s,"-f") == 0)
                 {
@@ -108,59 +106,40 @@ int shell() // Take inputs and run commands, return output
                 filenames[n_filenames] = s; 
                 n_filenames++;
                 filenames = realloc(filenames, 1024*(n_filenames+1)); // debugger broken, only shows first element in pointer array
-                // printf("%s\n",s);
-                // printf("%s",filenames[n_filenames]);
             }
 
 
             
             if(s == NULL) // if token is null ptr
             {
-             for(int i=0;i<n_filenames;i++)
+             for(int i=0;i<n_filenames;i++) // go through each filename
              {
-                //char str1[PATH_MAX] = "./";
-                //strcat(str1, my_dir);
-                //printf("value of str1 is: %s", str1);
-                if(put(my_dir) == true){
+                
+                if(put(my_dir) == true){ // if we made the dir , copy files
                     copy_file(filenames[i],my_dir);
                 }
                 else{
-                    printf("Could not create file. \n");
+                    printf("Could not create file. \n"); // directory exists
                     break;
                 }
              }
              
             }
-            else if(strcmp(s,"-f") == 0)
+            else if(strcmp(s,"-f") == 0) // check -f is input
             {
-                for(int i = 0;i<n_filenames;i++)
+                for(int i = 0;i<n_filenames;i++) //force the copy
                 {
-                    put(my_dir);
+                    put(my_dir); 
                     copy_file(filenames[i],my_dir);
                 }
             }
 
-            
-            // for(int i=0;i<n_filenames;i++)
-            // {
-            //     printf("n of filename: %i / value: %s\n",i, filenames[i]);
-            // }
 
-            // //     printf("%s\n",argv[i]);
-            // // }
-            // char* s[10];
-            // put("sup", s);
-
-            // copy_file("test.txt","./sup");
-            // //my_gets("test.txt");
-                    
-            
-            
         }
         
         
         cleanup:
-        free(buffer);
+        free(buffer); // free the memory from buffer
     }
 }
 
