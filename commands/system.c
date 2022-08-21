@@ -37,11 +37,11 @@ void print_sys() // prints version of OS and CPU type
 #elif _WIN64
     printf("This is a Windows 64bit operating system");
 #elif __LINUX__
-    system("less /proc/cpuinfo");
+    system("cat /proc/cpuinfo");
     printf("This is a Linux operating system\n");
 #elif _POSIX_VERSION
     printf("This is a POSIX based operating system (Windows with cygwin)\n");
-    system("less /proc/cpuinfo");
+    system("cat /proc/cpuinfo");
 #else
     printf("Operating system not detected.\n");
 #endif
